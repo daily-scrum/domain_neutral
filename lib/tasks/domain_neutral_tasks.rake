@@ -1,4 +1,10 @@
-# desc "Explaining what the task does"
-# task :domain_neutral do
-#   # Task goes here
-# end
+namespace :domain_neutral do
+  namespace :seed do
+    desc 'Seed descriptors directly without migration'
+    task :descriptors => :environment do
+      require 'domain_neutral/seeder/descriptors'
+      DomainNeutral::Seeder::Descriptors.seed self 
+    end
+  end
+end
+

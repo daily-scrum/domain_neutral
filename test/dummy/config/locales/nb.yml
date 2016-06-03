@@ -1,0 +1,9 @@
+nb:
+  descriptors:
+    role:
+      site_admin:
+        name: Nettstedadmin
+        description: Administrator nettsted
+      user_admin:
+        name: Bruker-administrator
+        description: Kan administrere brukere....
