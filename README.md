@@ -1,6 +1,6 @@
 # DescriptorModel
 
-Model framework for for domain neutral classes, such as Descriptor which is fundamental for every database to describe characteristics of an object.
+Model framework for domain neutral classes, such as Descriptor which is fundamental for every database to describe characteristics of an object.
 Example of descriptors:
   * Role
   * State or Status
@@ -20,11 +20,7 @@ $ rake domain_neutral:install:migrations
 $ rake db:migrate
 ```
 
-Create your models, and locale file(s). These needs 
-
-
-```ruby
-```
+Create your models, and locale file(s). See further down- 
 
 # Usage
 
@@ -46,17 +42,17 @@ class User < ActiveRecord::Base
 end
 ```
 
-To assign a role to a user, there are some alternatives. Here are a couple of alternatives:
+To assign a role to a user, there are some alternatives. Examples:
 
 ```ruby
-  user.role = Role[:project_manager]
-  user.role = Role.project_manager
+user.role = Role[:project_manager]
+user.role = Role.project_manager
 ```
 
 If you want to know if a user has a particular role, you can just ask for it.
 
 ```ruby
-  user.role.project_manager?
+user.role.project_manager?
 ```
 
 The above 2 examples are implemented as a part of the SymbolizedClass module, the DomainNeutral gem exposes.
@@ -66,9 +62,9 @@ See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) for details.
 If you have defined the `index` attribute for the descriptor, you may also compare them:
 
 ```ruby
-  if user.role < Role.project_manager
-    raise AccessDenied, "You are not authorized to access this..."
-  end
+if user.role < Role.project_manager
+  raise AccessDenied, "You are not authorized to access this..."
+end
 ```
 
 ## Migrating new model
@@ -85,11 +81,13 @@ rails g migration add_role_descriptors
 ```
 
 Then seed from the migration file:
+```ruby
 class CreateDescriptors < ActiveRecord::Migration
   def change
     load 'domain_neutral/seed/descriptors'
   end
 end
+```
 
 Note: If you want to delete descriptor records, `load 'domain_neutral/seed/descriptors'` will not remove these records.
 
@@ -147,8 +145,9 @@ Example:
 # Caching
 
 By default caching is turned on. You may switch off caching globally by calling:
+```ruby
   DomainNeutral::Descriptor.enable_caching off
-  
+```
 See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) for details on how caching is done.
 
 # Configuration
@@ -158,10 +157,10 @@ Configuration is done in application.rb and/or respective environment files.
 Default values:
 
 ```ruby
-  config.domain_neutral.table_prefix = 'domain_neutral' # Table prefix
-  config.domain_neutral.seed.master_locale = :en        # Default master data locale. Language used for seeding
-  config.domain_neutral.seed.locale_alternatives = []   # Alternative locale data. These will be parsed and checked for consistency with the master
-  config.domain_neutral.seed.verbose = true             # Display progress when seeding
+config.domain_neutral.table_prefix = 'domain_neutral' # Table prefix
+config.domain_neutral.seed.master_locale = :en        # Default master data locale. Language used for seeding
+config.domain_neutral.seed.locale_alternatives = []   # Alternative locale data. These will be parsed and checked for consistency with the master
+config.domain_neutral.seed.verbose = true             # Display progress when seeding
 ```
 
 Extending the Descriptor class. Add the changes to a initializer file. Example:
