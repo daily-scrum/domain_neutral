@@ -1,0 +1,14 @@
+site_admin:
+  type: Role
+  symbol: site_admin
+  name: Site admin
+  description: Site administrator
+  index: 1
+  value: 100
+user_admin:
+  type: Role
+  symbol: user_admin
+  name: User Administrator
+  description: Administers users and legal entities
+  index: 2
+  value: 200
