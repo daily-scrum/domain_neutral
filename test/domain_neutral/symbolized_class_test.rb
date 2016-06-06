@@ -62,6 +62,15 @@ module DomainNeutral
           assert_equal :ok, @tc.expert
           assert @tc.method_defined?( :expert)
         end
+        should 'support collection' do
+          @admin = @tc.new(symbol: :admin)
+          @site_admin = @tc.new(symbol: :site_admin)
+          @user_admin = @tc.new(symbol: :user_admin)
+          @tc.expects(:find_by_symbol).with(:admin).returns(@admin)
+          @tc.expects(:find_by_symbol).with(:site_admin).returns(@site_admin)
+          @tc.expects(:find_by_symbol).with(:user_admin).returns(@user_admin)
+          assert_equal [@admin, @site_admin, @user_admin], @tc.collection(:admin, :site_admin, :user_admin)
+        end
       end
       
       context 'without cache' do
@@ -123,6 +132,27 @@ module DomainNeutral
           assert !admin.system_admin?
           @tc.expects(:find_by_symbol).with('admin').returns(admin)
           assert admin.admin?
+        end
+        context 'Comparing' do
+          setup do
+            @admin = @tc.new(symbol: :admin)
+          end
+          should 'respond to is_one_of?' do
+            assert @admin.is_one_of?(:admin, :site_admin)
+            assert !@admin.is_one_of?(:site_admin, :user_admin)
+            assert @admin.is_one_of?([:admin, :site_admin])
+            assert !@admin.is_one_of?([:site_admin, :user_admin])
+            assert @admin.is_one_of?(:admin)
+            assert !@admin.is_one_of?(:site_admin)
+          end
+          should 'respond to is_none_of?' do
+            assert @admin.is_none_of?(:site_admin, :user_admin)
+            assert !@admin.is_none_of?(:admin, :site_admin)
+            assert @admin.is_none_of?([:site_admin, :user_admin])
+            assert !@admin.is_none_of?([:admin, :site_admin])
+            assert @admin.is_none_of?(:site_admin)
+            assert !@admin.is_none_of?(:admin)
+          end
         end
       end
       

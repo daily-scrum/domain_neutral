@@ -79,6 +79,13 @@ module DomainNeutral
         end
       end
 
+      # Role.collection(:site_admin, :user_admin, :admin)
+      # => Role[] consisting of Role.site_admin, Role.user_admin, Role.admin
+      def collection(*syms)
+        syms.flatten.map { |s| self[s] }
+      end
+  
+
       # Turn cache on or off
       # Calling enable_caching without parameter or true will turn on caching
       # By default cache is off. 
@@ -118,6 +125,22 @@ module DomainNeutral
     def to_sym
       symbol
     end
+
+    # Role.admin.is_one_of?(:admin, :site_admin)
+    # => true
+    # Role.admin.is_one_of?(:site_admin, :user_admin)
+    # => false
+    def is_one_of?(*syms)
+      syms.flatten.include?(to_sym)
+    end
+  
+    # Role.admin.is_none_of?(:site_admin, :user_admin)
+    # => true
+    # Role.admin.is_none_of?(:admin, :site_admin)
+    # => false
+    def is_none_of?(*syms)
+      !syms.flatten.include?(to_sym)
+    end  
 
     # Allow to test for a specific role or similar like Role.accountant?
     def method_missing(method, *args)
