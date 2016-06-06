@@ -9,4 +9,9 @@ module DomainNeutral
   def self.rails_generation
     @@__generation ||= Rails.version.split('.')[0].to_i
   end
+  
+  def self.seed
+    require 'domain_neutral/seed'
+    Seed.new
+  end
 end

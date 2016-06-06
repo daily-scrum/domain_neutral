@@ -55,7 +55,8 @@ If you want to know if a user has a particular role, you can just ask for it.
 user.role.project_manager?
 ```
 
-The above 2 examples are implemented as a part of the SymbolizedClass module, the DomainNeutral gem exposes.
+The above 2 examples are implemented as a part of the SymbolizedClass module that the DomainNeutral gem exposes.
+There are other methods as well, such as `collection`, `is_one_of?` and `is_none_of?`
 See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) for details.
 
 
@@ -84,12 +85,12 @@ Then seed from the migration file:
 ```ruby
 class CreateDescriptors < ActiveRecord::Migration
   def change
-    load 'domain_neutral/seed/descriptors'
+    DomainNeutral.seed.descriptors(self)
   end
 end
 ```
 
-Note: If you want to delete descriptor records, `load 'domain_neutral/seed/descriptors'` will not remove these records.
+Note: If you want to delete descriptor records, `DomainNeutral.seed.descriptors` will not remove these records.
 
 # Localization
 
