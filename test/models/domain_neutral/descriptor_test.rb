@@ -97,5 +97,15 @@ module DomainNeutral
         end
       end
     end
+    fixtures :users
+    context 'association' do
+      setup do
+        @user = users(:one)
+      end
+      should 'override reader' do
+        Role.expects(:find).with(@user.role_id)
+        @user.role
+      end
+    end
   end
 end

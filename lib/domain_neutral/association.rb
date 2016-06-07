@@ -2,24 +2,17 @@ module DomainNeutral
   module Association
     extend ActiveSupport::Concern
     
-    # included do
-    # end
-
-    module Finder
-      
-    end
-
     module ClassMethods
       def has_descriptor(name, options = {})
         # TODO: add delegate method
-        belongs_to name #, ->{ extending DomainNeutral::Association::Finder}, options 
+        belongs_to name, options
+        r = reflect_on_association(name)
+        class_eval <<-CODE, __FILE__, __LINE__
+          def #{name}
+            #{r.klass}.find(#{r.foreign_key})
+          end
+        CODE
       end
-      
-      # def descriptors(*associations)
-      #   associations.each do |association|
-      #     descriptor association
-      #   end
-      # end
     end
   end
 end

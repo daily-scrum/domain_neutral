@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601072742) do
+ActiveRecord::Schema.define(version: 20160607100350) do
 
   create_table "descriptors", force: :cascade do |t|
     t.string   "type"
@@ -29,5 +29,14 @@ ActiveRecord::Schema.define(version: 20160601072742) do
   add_index "descriptors", ["parent_type", "parent_id"], name: "index_descriptors_on_parent_type_and_parent_id"
   add_index "descriptors", ["type", "index"], name: "index_descriptors_on_type_and_index"
   add_index "descriptors", ["type", "symbol"], name: "index_descriptors_on_type_and_symbol"
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "role_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "users", ["role_id"], name: "index_users_on_role_id"
 
 end
