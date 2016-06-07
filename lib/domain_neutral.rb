@@ -1,6 +1,7 @@
 require 'domain_neutral/symbolized_class'
 require "domain_neutral/engine"
 require 'domain_neutral/railtie' if defined?(Rails)
+require 'domain_neutral/association'
 module DomainNeutral
   mattr_accessor :seed_options
   # Identifies the Rails generation version
