@@ -25,7 +25,7 @@ $ rake domain_neutral:install:migrations
 $ rake db:migrate
 ```
 
-Create your models, and locale file(s). See further down- 
+Create your models, and locale file(s). See further down 
 
 # Usage
 
@@ -104,9 +104,9 @@ The attributes enlisted for translation are:
 *  descriptioon
 
 All attributes, including the above are used for seeding
-  parent
-  index
-  value
+* parent
+* index
+* value
   
 Structure
 ```yaml
@@ -116,6 +116,7 @@ Structure
         [parent: <default parent for objects>]
         <symbol>:
           <attributes>    
+```
 
 Example:
 
@@ -146,7 +147,7 @@ Example:
         department_manager:
           parent: Role::Group.organization
           name: Department Manager
- ```
+```
 
 # Caching
 
@@ -155,7 +156,7 @@ By default caching is turned on. You may switch off caching globally by setting 
 config.domain_neutral.cache = false
 ```
 It is recommended to switch off cache in test.
-See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) for details on how caching is done.
+See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) and [Association](lib/domain_neutral/association.rb) for details on how caching is done.
 
 # Configuration
   
