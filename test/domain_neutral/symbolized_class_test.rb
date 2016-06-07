@@ -100,7 +100,7 @@ module DomainNeutral
             end
           end
           should 'lookup object by symbol' do
-            expect_cached [@tc.name, :expert] do
+            expect_cached [@tc.name, 'expert'] do
               @tc.expects(:where).with(symbol: :expert).returns([:ok])
               assert_equal :ok, @tc.find_by_symbol( :expert)
             end

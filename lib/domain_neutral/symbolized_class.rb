@@ -71,7 +71,7 @@ module DomainNeutral
       #   Descriptor.symbol
       def find_by_symbol(symbol)
         if caching_enabled
-          Rails.cache.fetch([name, symbol]) do
+          Rails.cache.fetch([name, symbol.to_s]) do
             where(symbol: symbol).first
           end
         else
@@ -163,7 +163,7 @@ module DomainNeutral
     
     # Flushes cache if record is saved
     def flush_cache
-      Rails.cache.delete([self.class.name, symbol_was])
+      Rails.cache.delete([self.class.name, symbol_was.to_s])
       Rails.cache.delete([self.class.name, id])
     end
   end

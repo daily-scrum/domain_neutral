@@ -8,6 +8,7 @@ module DomainNeutral
         seeder.load_master_data
         seeder.validate_master
         seeder.validate_locale_alternatives
+        seeder.create_fixtures_file
         seeder.seed_parents
         seeder.seed_everything_else
       end
@@ -20,7 +21,7 @@ module DomainNeutral
         DomainNeutral.seed_options
       end
       
-      delegate :verbose, :master_locale, :locale_alternatives, to: :seed_options
+      delegate :verbose, :master_locale, :locale_alternatives, :create_fixtures, to: :seed_options
       
       def setup
         if DomainNeutral.rails_generation < 4
@@ -105,6 +106,27 @@ module DomainNeutral
         abort undefined if undefined.size > 0
       end
       
+      def create_fixtures_file
+        return unless create_fixtures
+        fixtures = {}
+        master.each do |descriptor_set, descriptors|
+          base = {type: descriptor_set.classify}
+          if parent = descriptors[:parent]
+            abort "Parent for fixtures not yet implemented.", descriptors.inspect
+            base[:parent] = parent
+          end
+          descriptors.reject { |k,v| k == 'parent'  }.each do |symbol, descriptor|
+            fixtures["#{descriptor_set}_#{symbol}"] = descriptor.merge(base.merge(symbol: symbol)).to_hash
+          end
+        end
+        path = fixtures_path.join('domain_neutral', 'descriptors.yml')
+        FileUtils.mkdir_p path.dirname
+        File.open(path, 'w') do |f|
+          f.write fixtures.to_yaml
+        end
+        log "Seeders file created (#{path}):"
+      end
+      
     private
       def load_yaml(locale, type)
         file = locate_locale_file(locale, type)
@@ -148,7 +170,14 @@ module DomainNeutral
           end
         end
       end
-
+      
+      def fixtures_path
+        if ENV['FIXTURES_PATH']
+          Rails.root.join(ENV['FIXTURES_PATH'])
+        else
+          Rails.root.join('test', 'fixtures')
+        end
+      end
       def abort(*messages)
         raise "#{self.class.name}: #{messages.join("\n")}"
       end
@@ -156,7 +185,7 @@ module DomainNeutral
       def log(message)
         # @context.say message if DomainNeutral.verbose_seed
         if verbose
-          @messenger ||= @contect.is_a?( ActiveRecord::Migration) ? :say : :puts
+          @messenger ||= @context.is_a?( ActiveRecord::Migration) ? :say : :puts
           @context.send @messenger,  message
         end
       end
