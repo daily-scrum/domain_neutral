@@ -102,8 +102,13 @@ module DomainNeutral
       setup do
         @user = users(:one)
       end
-      should 'override reader' do
+      should 'override reader with find' do
         Role.expects(:find).with(@user.role_id)
+        @user.role
+      end
+      should 'not try to find record when foreign key is nil' do
+        @user.role_id = nil
+        Role.expects(:find).never
         @user.role
       end
     end

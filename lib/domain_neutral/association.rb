@@ -9,7 +9,7 @@ module DomainNeutral
         r = reflect_on_association(name)
         class_eval <<-CODE, __FILE__, __LINE__
           def #{name}
-            #{r.klass}.find(#{r.foreign_key})
+            #{r.foreign_key} && #{r.klass}.find(#{r.foreign_key})
           end
         CODE
       end
