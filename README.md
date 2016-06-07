@@ -5,7 +5,12 @@ Example of descriptors:
   * Role
   * State or Status
   * Account
+  
+The above are entities that seldom change, and therefore should be accessible in a faster way than being looked up from database on every request.
 
+Benefits:
+  * Stores descriptors in cache.
+  * Supports association declaration (`has_descriptor`) that takes advantage of using the cache.
 
 # Installation
 
