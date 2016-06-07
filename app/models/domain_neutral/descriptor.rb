@@ -14,7 +14,7 @@ module DomainNeutral
         @symbols ||= begin
           # ensure that we really have some items stored. This method may be called before fixtures are loaded in test environment
           s = all.map(&:symbol)
-          s.size > 0 ? s : nil
+          s.size.zero? ? nil : s
         end
       end
     end
