@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = DomainNeutral::VERSION
   s.authors     = ["Knut I. Stenmark"]
   s.email       = ["knut.stenmark@gmail.com"]
-  s.homepage    = "https://github.com/daily_scrum/domain_neutral"
+  s.homepage    = "https://github.com/daily-scrum/domain_neutral"
   s.summary     = "DomainNeutral provides domain neutral model classes needed for most projects"
   s.description = <<-END
     Model framework for for domain neutral classes, such as Descriptor which is fundamental for every database
