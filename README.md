@@ -38,7 +38,7 @@ See [Seeding](#Seeding) for seeding of data
 
 ```ruby
 class User < ActiveRecord::Base
-  descriptor :role
+  has_descriptor :role
 end
 ```
 
@@ -145,10 +145,11 @@ Example:
 
 # Caching
 
-By default caching is turned on. You may switch off caching globally by calling:
+By default caching is turned on. You may switch off caching globally by setting cache off in the application.rb file:
 ```ruby
-  DomainNeutral::Descriptor.enable_caching off
+config.domain_neutral.cache = false
 ```
+It is recommended to switch off cache in test.
 See [SymbolizedClass](lib/domain_neutral/symbolized_class.rb) for details on how caching is done.
 
 # Configuration
@@ -159,9 +160,11 @@ Default values:
 
 ```ruby
 config.domain_neutral.table_prefix = 'domain_neutral' # Table prefix
+config.domain_neutral.cache = true                    # Use cache
 config.domain_neutral.seed.master_locale = :en        # Default master data locale. Language used for seeding
 config.domain_neutral.seed.locale_alternatives = []   # Alternative locale data. These will be parsed and checked for consistency with the master
 config.domain_neutral.seed.verbose = true             # Display progress when seeding
+config.domain_neutral.seed.create_fixtures = true     # Create fixtures from master file
 ```
 
 Extending the Descriptor class. Add the changes to a initializer file. Example:
