@@ -61,6 +61,12 @@ module DomainNeutral
         assert_equal 5, @shit.to_i
       end
     end
+    
+    context 'class methods' do
+      should 'include symbols' do
+        assert_equal [:site_admin, :user_admin], Role.symbols.sort
+      end
+    end
   
     context 'translation' do
       setup do

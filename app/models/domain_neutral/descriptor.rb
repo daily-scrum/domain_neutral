@@ -4,11 +4,20 @@ module DomainNeutral
     include SymbolizedClass
     include Comparable
     # Enable caching by default
-    enable_caching
 
     belongs_to :parent, :polymorphic => true
     validates_presence_of :name, :symbol
     validates_uniqueness_of :symbol, scope: :type
+    
+    class << self
+      def symbols
+        @symbols ||= begin
+          # ensure that we really have some items stored. This method may be called before fixtures are loaded in test environment
+          s = all.map(&:symbol)
+          s.size > 0 ? s : nil
+        end
+      end
+    end
   
     def <=>(other)
     	index <=> other.index
