@@ -95,16 +95,24 @@ module DomainNeutral
             @tc.enable_caching # true
           end
           should 'delegate find to super' do
-            expect_cached [@tc.name, 44]  do
+            expect_cached [@tc.name, 44], nil  do
               assert_equal 44, @tc.find(44)
             end
           end
           should 'lookup object by symbol' do
-            expect_cached [@tc.name, 'expert'] do
+            expect_cached [@tc.name, 'expert'], nil do
               @tc.expects(:where).with(symbol: :expert).returns([:ok])
               assert_equal :ok, @tc.find_by_symbol( :expert)
             end
           end
+          should 'delete cached entry if not found' do
+            expect_cached [@tc.name, 'expert'], nil do |cache|
+              @tc.expects(:where).with(symbol: :expert).returns([nil])
+              assert_equal nil, @tc.find_by_symbol( :expert)
+              assert_equal [@tc.name, 'expert'], cache.called?( :delete)
+            end
+          end
+          
         end
       end
       

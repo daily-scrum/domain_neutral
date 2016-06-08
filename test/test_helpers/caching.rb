@@ -2,19 +2,18 @@ class ActiveSupport::TestCase
   class CacheStub
     def initialize(test_object, *expected_params)
       @test_object, @expected_params = test_object, expected_params
+      @called = {}
     end
     
     def fetch(*params, &block)
-      @called = :fetch
-      @test_object.assert_equal @expected_params, params
+      @called[:fetch] = params
       block.call
     end
-    def delete(*params)
-      @called = :delete
-      @test_object.assert_equal @expected_params, params
+    def delete(params)
+      @called[:delete] = params
     end
     def called?(method)
-      @called == method
+      @called[method]
     end
   end
   
@@ -44,8 +43,9 @@ class ActiveSupport::TestCase
     raise ArgumentError, 'You must specify block' unless block_given?
     cache = CacheStub.new(self, *params)
     Rails.stubs(:cache).returns(cache)
-    yield
+    yield cache
     assert cache.called?(expected_method), "cache #{expected_method} was never called\n #{caller[1]}"
+    assert_equal params, cache.called?(expected_method)
     Rails.unstub(:cache)
   end
 

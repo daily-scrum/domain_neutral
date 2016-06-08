@@ -57,9 +57,7 @@ module DomainNeutral
       # Overrides find by using cache.
       # The key in cache is [class_name, id] or ':class_name/:id', e.g. 'Role/1'
       def find(id)
-        if caching_enabled
-          Rails.cache.fetch([name, id]) { super }
-        else
+        fetch([name, id]) do
           super
         end
       end
@@ -70,11 +68,7 @@ module DomainNeutral
       #   Descriptor[:symbol]
       #   Descriptor.symbol
       def find_by_symbol(symbol)
-        if caching_enabled
-          Rails.cache.fetch([name, symbol.to_s]) do
-            where(symbol: symbol).first
-          end
-        else
+        fetch([name, symbol.to_s]) do
           where(symbol: symbol).first
         end
       end
@@ -106,6 +100,20 @@ module DomainNeutral
       
       def enable_caching(*args)
         self.caching_enabled = args.size > 0 ? args.first : true
+      end
+      
+    private
+      # Ensures cache is cleared if nil result
+      def fetch(key, options = nil) 
+        if caching_enabled
+          result = Rails.cache.fetch(key, options) do
+            yield
+          end
+          Rails.cache.delete(key) unless result
+        else
+          result = yield
+        end
+        result
       end
     end
 
