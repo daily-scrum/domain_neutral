@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    domain_neutral (1.0.2)
+    domain_neutral (1.0.3)
       rails (>= 3.2)
 
 GEM
